@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            background: linear-gradient(to bottom, #3a639b, #001944);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            align-items: center;
+        }
+        h1 {
+            color: #fff;
+            margin-top: 10px;
+        }
+        .images {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .images div {
+            text-align: center;
+            margin: 0 20px;
+            padding: 15px;
+            border-radius: 10px;
+            width: 120px;
+        }
+        .images img {
+            width: 100px;
+            height: 100px;
+            border: 2px solid transparent;
+            transition: 0.3s ease;
+        }
+        .images img.winner {
+            border-color: rgb(186, 160, 13);
+            box-shadow: 0 0 10px gold;
+        }
+        .computer-box {
+            background-color: rgba(255, 0, 0, 0.2);
+            margin-top: 50px;
+        }
+        .user-box {
+            background-color: rgba(0, 255, 0, 0.2);
+            margin-bottom: 50px;
+        }
+        .choices {
+            margin: 20px;
+        }
+        .choices button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border: 2px solid #333;
+            border-radius: 5px;
+            background-color: #ffdd59;
+            color: #333;
+            transition: 0.3s ease;
+        }
+        .choices button:hover {
+            background-color: #ffc048;
+            border-color: #f39c12;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .result.win {
+            color: #28a745;
+        }
+        .result.lose {
+            color: #dc3545;
+        }
+        .result.tie {
+            color: #ffc107;
+        }
+        .play-again {
+            margin: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Computer's Choice (top) -->
+    <div class="images computer-box">
+        <h3>Computer's Choice</h3>
+        <img id="computerImage" src="https://i.postimg.cc/s2FRGkxR/images-1.png" alt="Computer's Choice">
+    </div>
+
+    <h1>Rock Paper Scissors</h1>
+
+    <!-- User's Choice (bottom) -->
+    <div class="images user-box">
+        <h3>Your Choice</h3>
+        <img id="playerImage" src="https://i.postimg.cc/gjtpTrKC/misc-game-singleplayer-512.webp" alt="Your Choice">
+    </div>
+
+    <!-- Buttons to play -->
+    <div class="choices">
+        <button onclick="playGame('rock')">Rock</button>
+        <button onclick="playGame('paper')">Paper</button>
+        <button onclick="playGame('scissors')">Scissors</button>
+    </div>
+
+    <!-- Result Display -->
+    <div class="result">
+        <p id="gameResult"></p>
+    </div>
+    
+    <!-- Play Again Button -->
+    <div class="play-again">
+        <button onclick="resetGame()">Play Again</button>
+    </div>
+
+    <script>
+        // URLs for rock, paper, scissors images
+        const images = {
+            rock: "https://i.postimg.cc/YCpqW976/images.png",
+            paper: "https://i.postimg.cc/d0wdDvHp/paper.jpg",
+            scissors: "https://i.postimg.cc/PrFdFk8Z/scissors.png"
+        };
+
+        function playGame(playerChoice) {
+            const choices = ["rock", "paper", "scissors"];
+            const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+
+            // Set image sources for the player and computer choices
+            const playerImage = document.getElementById('playerImage');
+            const computerImage = document.getElementById('computerImage');
+            playerImage.src = images[playerChoice];
+            computerImage.src = images[computerChoice];
+
+            // Determine the result
+            let result;
+            if (playerChoice === computerChoice) {
+                result = "It's a tie!";
+                updateResultDisplay(result, "tie");
+            } else if (
+                (playerChoice === 'rock' && computerChoice === 'scissors') ||
+                (playerChoice === 'paper' && computerChoice === 'rock') ||
+                (playerChoice === 'scissors' && computerChoice === 'paper')
+            ) {
+                result = "You win!";
+                updateResultDisplay(result, "win");
+                playerImage.classList.add('winner');
+            } else {
+                result = "You lose!";
+                updateResultDisplay(result, "lose");
+                computerImage.classList.add('winner');
+            }
+
+            // Show Play Again button
+            document.querySelector('.play-again').style.display = 'block';
+        }
+
+        function updateResultDisplay(result, outcome) {
+            const resultElement = document.getElementById('gameResult');
+            resultElement.textContent = result;
+            resultElement.className = `result ${outcome}`;
+        }
+
+        function resetGame() {
+            // Clear images
+            document.getElementById('playerImage').src = "https://i.postimg.cc/gjtpTrKC/misc-game-singleplayer-512.webp";
+            document.getElementById('computerImage').src = "https://i.postimg.cc/s2FRGkxR/images-1.png";
+
+            // Remove winner highlight
+            document.getElementById('playerImage').classList.remove('winner');
+            document.getElementById('computerImage').classList.remove('winner');
+
+            // Clear result text
+            const resultElement = document.getElementById('gameResult');
+            resultElement.textContent = "";
+            resultElement.className = "result";
+
+            // Hide Play Again button
+            document.querySelector('.play-again').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
